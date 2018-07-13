@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DaXuBubbleSeekBar">
+        <attr name="min" format="float|reference" />
+        <attr name="max" format="float|reference" />
+        <attr name="indicatorHeight" format="dimension|reference" />
+        <attr name="indicatorWidth" format="dimension|reference" />
+        <attr name="indicatorTextColor" format="color|reference" />
+        <attr name="indicatorTextSize" format="dimension|reference" />
+        <attr name="barHeight" format="dimension|reference" />
+        <attr name="track" format="reference" />
+        <attr name="secondTrack" format="reference" />
+        <attr name="indicator" format="reference" />
+        <attr name="bubbleBackgroud" format="reference" />
+        <attr name="bubbleWidth" format="dimension|reference" />
+        <attr name="bubbleHeight" format="dimension|reference" />
+        <attr name="bubbleOffset" format="dimension|reference" />
+        <attr name="trackMarginLeft" format="dimension|reference" />
+        <attr name="trackMarginRight" format="dimension|reference" />
+    </declare-styleable>
+</resources>
