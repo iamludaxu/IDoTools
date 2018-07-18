@@ -7,24 +7,27 @@
     android:orientation="vertical"
     tools:context="ren.daxu.idotools.ui.UIActivity">
 
-    <ren.daxu.ui.seekbar.BubbleSeekBar
-        android:id="@+id/bubbleSeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/colorPrimary"
-        app:barHeight="10dp"
-        app:bubbleBackgroud="@drawable/thumb"
-        app:indicator="@drawable/thumb"
-        app:indicatorHeight="20dp"
-        app:indicatorTextSize="12dp"
-        app:indicatorWidth="60dp"
-        app:max="100.0"
-        app:min="50.0"
-        app:secondTrack="@drawable/track_s"
-        app:track="@drawable/track" />
+    <FrameLayout
+        android:layout_width="160dp"
+        android:layout_height="40dp">
 
+        <ren.daxu.ui.seekbar.BubbleSeekBar
+            android:id="@+id/bubbleSeekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:barHeight="10dp"
+            app:bubbleBackgroud="@mipmap/ic_launcher"
+            app:bubbleHeight="50dp"
+            app:bubbleWidth="100dp"
+            app:indicator="@drawable/thumb"
+            app:indicatorHeight="20dp"
+            app:indicatorTextSize="12dp"
+            app:indicatorWidth="60dp"
+            app:max="100.0"
+            app:min="50.0"
+            app:secondTrack="@drawable/track_s"
+            app:track="@drawable/track" />
 
+    </FrameLayout>
 </LinearLayout>

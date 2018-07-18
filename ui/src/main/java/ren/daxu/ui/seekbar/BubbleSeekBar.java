@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -95,7 +96,7 @@ public class BubbleSeekBar extends View {
         mLayoutParams.y = 0;
         mLayoutParams.gravity = Gravity.START | Gravity.TOP;
         mLayoutParams.width = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_bubbleWidth, 150);
-        mLayoutParams.height = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_bubbleHeight, 10);
+        mLayoutParams.height = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_bubbleHeight, 20);
         init();
     }
 
@@ -126,8 +127,21 @@ public class BubbleSeekBar extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        mTrackCenterY = getMeasuredHeight() >> 1;
-        mTrackLength = getMeasuredWidth() - mThumbWidth;
+        //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int measureWidth = getLayoutParams().width;
+        int measureHeight = getLayoutParams().height;
+        if (measureHeight == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            measureHeight = (int) (mThumbHeight > mTrackHeight ? mThumbHeight : mTrackHeight);
+        }
+        if (measureWidth == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            measureWidth = (int) mThumbWidth;
+        }
+        measureWidth = resolveSize(measureWidth, widthMeasureSpec);
+        measureHeight = resolveSize(measureHeight, heightMeasureSpec);
+        setMeasuredDimension(measureWidth, measureHeight);
+        mTrackCenterY = measureHeight >> 1;
+        mTrackLength = measureWidth - mThumbWidth;
     }
 
     @Override
@@ -157,12 +171,11 @@ public class BubbleSeekBar extends View {
                 }
             }
             break;
-            case MotionEvent.ACTION_UP: {
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
                 if (mOnProgressChangedListener != null) {
                     mOnProgressChangedListener.onStopTrackingTouch(this);
                 }
-            }
-            case MotionEvent.ACTION_CANCEL: {
                 isThumbOnDragging = false;
                 hideBubble();
             }
@@ -175,7 +188,7 @@ public class BubbleSeekBar extends View {
      * 计算Bubble
      */
     private void calculateBubble() {
-        mLayoutParams.x = mPoint[0] + Math.round(mThumbOffset) - Math.round((mBubbleFL.getWidth() - mThumbWidth) / 2);
+        mLayoutParams.x = mPoint[0] + (int)(mThumbOffset) - (int)((mBubbleFL.getWidth() - mThumbWidth) / 2);
         mLayoutParams.y = mPoint[1] - mBubbleFL.getHeight() - Math.round(mThumbHeight / 2.0f) - mBubbleOffset;
         mWindowManager.updateViewLayout(mBubbleFL, mLayoutParams);
     }
@@ -237,6 +250,25 @@ public class BubbleSeekBar extends View {
     }
 
     /**
+     * 增加自定义气泡弹出框
+     *
+     * @param view
+     */
+    public void addBubbleFL(View view) {
+        mBubbleFL.addView(view);
+    }
+
+
+    /**
+     * 移除BubbleFL
+     * <p>
+     * 在销毁布局的时候必须调用否则会报错"has leaked window android.widget.framelayout"
+     */
+    public void destroy() {
+        mWindowManager.removeViewImmediate(mBubbleFL);
+    }
+
+    /**
      * 设置最大值
      *
      * @param max
@@ -282,7 +314,6 @@ public class BubbleSeekBar extends View {
     }
 
     /**
-     *
      * @param thumbText
      */
     public void updateThumbText(String thumbText) {
@@ -433,3 +464,4 @@ public class BubbleSeekBar extends View {
 
 
 }
+
