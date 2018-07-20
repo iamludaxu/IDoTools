@@ -3,14 +3,14 @@
     <declare-styleable name="DaXuBubbleSeekBar">
         <attr name="min" format="float|reference" />
         <attr name="max" format="float|reference" />
-        <attr name="thumbHeight" format="dimension|reference" />
-        <attr name="thumbWidth" format="dimension|reference" />
-        <attr name="thumbTextColor" format="color|reference" />
-        <attr name="thumbTextSize" format="dimension|reference" />
+        <attr name="indicatorHeight" format="dimension|reference" />
+        <attr name="indicatorWidth" format="dimension|reference" />
+        <attr name="indicatorTextColor" format="color|reference" />
+        <attr name="indicatorTextSize" format="dimension|reference" />
         <attr name="barHeight" format="dimension|reference" />
         <attr name="track" format="reference" />
         <attr name="secondTrack" format="reference" />
-        <attr name="thumb" format="reference" />
+        <attr name="indicator" format="reference" />
         <attr name="bubbleBackgroud" format="reference" />
         <attr name="bubbleWidth" format="dimension|reference" />
         <attr name="bubbleHeight" format="dimension|reference" />

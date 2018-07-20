@@ -28,7 +28,7 @@ import java.util.Properties;
 import ren.daxu.ui.R;
 
 /**
- * 仿得到app的SeekBar
+ * 自定义seek bar
  */
 public class BubbleSeekBar extends View {
 
@@ -76,17 +76,17 @@ public class BubbleSeekBar extends View {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DaXuBubbleSeekBar, defStyleAttr, 0);
         mMin = a.getFloat(R.styleable.DaXuBubbleSeekBar_min, 0.0f);
         mMax = a.getFloat(R.styleable.DaXuBubbleSeekBar_max, 100.0f);
-        mThumbHeight = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_thumbHeight, 60);
-        mThumbWidth = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_thumbWidth, 100);
+        mThumbHeight = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_indicatorHeight, 60);
+        mThumbWidth = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_indicatorWidth, 100);
         mTrackMarginLeft = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_trackMarginLeft, 0);
         mTrackMarginRight = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_trackMarginRight, 0);
-        mThumbTextColor = a.getColor(R.styleable.DaXuBubbleSeekBar_thumbTextColor, Color.BLACK);
-        mThumbTextSize = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_thumbTextSize, 14);
+        mThumbTextColor = a.getColor(R.styleable.DaXuBubbleSeekBar_indicatorTextColor, Color.BLACK);
+        mThumbTextSize = a.getDimensionPixelSize(R.styleable.DaXuBubbleSeekBar_indicatorTextSize, 14);
         mTrackHeight = a.getDimension(R.styleable.DaXuBubbleSeekBar_barHeight, 10);
         mTrack = a.getDrawable(R.styleable.DaXuBubbleSeekBar_track);
         mSecondTrack = a.getDrawable(R.styleable.DaXuBubbleSeekBar_secondTrack);
         mBubbleOffset = a.getDimensionPixelOffset(R.styleable.DaXuBubbleSeekBar_bubbleOffset, 10);
-        mThumb = a.getDrawable(R.styleable.DaXuBubbleSeekBar_thumb);
+        mThumb = a.getDrawable(R.styleable.DaXuBubbleSeekBar_indicator);
         mBubbleFL = new FrameLayout(getContext());
         mBubbleFL.setVisibility(GONE);
         mBubbleFL.setBackgroundDrawable(a.getDrawable(R.styleable.DaXuBubbleSeekBar_bubbleBackgroud));
@@ -144,54 +144,51 @@ public class BubbleSeekBar extends View {
         mTrackLength = measureWidth - mThumbWidth;
     }
 
-@Override
-public boolean onTouchEvent(MotionEvent event) {
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
 
-    switch (event.getAction()) {
-        case MotionEvent.ACTION_DOWN: {
-            performClick();
-            isThumbOnDragging = true;
-            if (mOnProgressChangedListener != null) {
-                mOnProgressChangedListener.onStartTrackingTouch(this);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                performClick();
+                isThumbOnDragging = true;
+                if (mOnProgressChangedListener != null) {
+                    mOnProgressChangedListener.onStartTrackingTouch(this);
+                }
+                showBubble();
             }
-            showBubble();
-        }
-        break;
-        case MotionEvent.ACTION_MOVE: {
-            mThumbOffset = event.getX() - mThumbWidth / 2;
-            if (mThumbOffset < 0)
-                mThumbOffset = 0;
-            else if (mThumbOffset > mTrackLength)
-                mThumbOffset = mTrackLength;
-            if (mTrackLength != 0)
+            break;
+            case MotionEvent.ACTION_MOVE: {
+                mThumbOffset = event.getX() - mThumbWidth / 2;
+                if (mThumbOffset < 0)
+                    mThumbOffset = 0;
+                else if (mThumbOffset > mTrackLength)
+                    mThumbOffset = mTrackLength;
                 mProgress = mMin + (mMax - mMin) * (mThumbOffset) / mTrackLength;
-            else
-                mProgress = mMin;
-            calculateBubble();
-            postInvalidate();
-            if (mOnProgressChangedListener != null) {
-                mOnProgressChangedListener.onProgressChanged(this, getProgress(), true);
+                calculateBubble();
+                postInvalidate();
+                if (mOnProgressChangedListener != null) {
+                    mOnProgressChangedListener.onProgressChanged(this, getProgress(), true);
+                }
             }
-        }
-        break;
-        case MotionEvent.ACTION_UP:
-        case MotionEvent.ACTION_CANCEL: {
-            if (mOnProgressChangedListener != null) {
-                mOnProgressChangedListener.onStopTrackingTouch(this);
+            break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                if (mOnProgressChangedListener != null) {
+                    mOnProgressChangedListener.onStopTrackingTouch(this);
+                }
+                isThumbOnDragging = false;
+                hideBubble();
             }
-            isThumbOnDragging = false;
-            hideBubble();
+            break;
         }
-        break;
+        return isThumbOnDragging | super.onTouchEvent(event);
     }
-    return isThumbOnDragging | super.onTouchEvent(event);
-}
 
     /**
      * 计算Bubble
      */
     private void calculateBubble() {
-        mLayoutParams.x = mPoint[0] + (int) (mThumbOffset) - (int) ((mBubbleFL.getWidth() - mThumbWidth) / 2);
+        mLayoutParams.x = mPoint[0] + (int)(mThumbOffset) - (int)((mBubbleFL.getWidth() - mThumbWidth) / 2);
         mLayoutParams.y = mPoint[1] - mBubbleFL.getHeight() - Math.round(mThumbHeight / 2.0f) - mBubbleOffset;
         mWindowManager.updateViewLayout(mBubbleFL, mLayoutParams);
     }
