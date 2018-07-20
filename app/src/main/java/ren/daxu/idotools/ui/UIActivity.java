@@ -21,15 +21,19 @@ public class UIActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ui);
 
         BubbleSeekBar bubbleSeekBar = (BubbleSeekBar) findViewById(R.id.bubbleSeekBar);
-        TextView textView = new TextView(this);
+        final TextView textView = new TextView(this);
         textView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        textView.setText("dddd");
+        textView.setBackgroundResource(R.drawable.bubble_bg);
+        textView.setText("");
+        textView.setTextColor(0xffffffff);
         textView.setGravity(Gravity.CENTER);
         bubbleSeekBar.addBubbleFL(textView);
         bubbleSeekBar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(BubbleSeekBar bubbleSeekBar, float progress, boolean fromUser) {
-                bubbleSeekBar.updateThumbText((int) progress + "/" + (int) bubbleSeekBar.getMax());
+                String str = (int) progress + "/" + (int) bubbleSeekBar.getMax();
+                bubbleSeekBar.updateThumbText(str);
+                textView.setText(str);
             }
 
             @Override
