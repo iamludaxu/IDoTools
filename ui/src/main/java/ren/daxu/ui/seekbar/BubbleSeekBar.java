@@ -262,13 +262,9 @@ public class BubbleSeekBar extends View {
         mBubbleFL.addView(view);
     }
 
-
-    /**
-     * 移除BubbleFL
-     * <p>
-     * 在销毁布局的时候必须调用否则会报错"has leaked window android.widget.framelayout"
-     */
-    public void destroy() {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         mWindowManager.removeViewImmediate(mBubbleFL);
     }
 
